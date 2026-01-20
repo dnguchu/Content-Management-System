@@ -78,7 +78,7 @@
       mode: 'same-origin'
   }
 
-  const moduleOrderUrl = '{% url "module_order" %}';
+  const moduleOrderUrl = '{% url 'module_order' %}';
 
   sortable('#modules', {
     forcePlaceholderSize: true,
@@ -101,7 +101,7 @@
     fetch(moduleOrderUrl, options)
   });
 
-  const contentOrderUrl = '{% url "content_order" %}';
+  const contentOrderUrl = '{% url 'content_order' %}';
 
   sortable('#module-contents', {
     forcePlaceholderSize: true,
