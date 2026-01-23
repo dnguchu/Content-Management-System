@@ -3,6 +3,7 @@ from django.db import models
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from .fields import OrderField
+from django.template.loader import render_to_string
 
 # Create your models here.
 class Subject(models.Model):
@@ -26,6 +27,11 @@ class Course(models.Model):
         Subject,
         related_name='courses',
         on_delete=models.CASCADE
+    )
+    students = models.ManyToManyField(
+        User,
+        related_name='courses_joined',
+        blank=True
     )
     title = models.CharField(max_length=200)
     slug = models.SlugField(max_length=200, unique=True)
@@ -85,6 +91,12 @@ class ItemBase(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
+    def render(self):
+        return render_to_string(
+            f'courses/content/{self._meta.model_name}.html',
+            {'item': self}
+        )
+
     class Meta:
         abstract = True
 
@@ -102,4 +114,3 @@ class Image(ItemBase):
 
 class Video(ItemBase):
     url = models.URLField()
-

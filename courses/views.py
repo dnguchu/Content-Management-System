@@ -1,3 +1,4 @@
+from multiprocessing import context
 from urllib import request
 from django.shortcuts import render
 from django.views.generic.list import ListView
@@ -16,6 +17,7 @@ from django.apps import apps
 from django.forms.models import modelform_factory
 from django.db.models import Count
 from django.views.generic.detail import DetailView
+from students.forms import CourseEnrollForm
 
 # Create your views here.
 class ManageCourseListView(ListView):
@@ -202,3 +204,10 @@ class CourseListView(TemplateResponseMixin, View):
 class CourseDetailView(DetailView):
     model = Course
     template_name = 'courses/course/detail.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['enroll_form'] = CourseEnrollForm(
+            initial={'course': self.object}
+        )
+        return context
